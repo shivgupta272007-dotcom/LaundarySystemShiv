@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Laundry Order Management System - Create, track, and manage dry cleaning orders efficiently.">
+  <title>🧺 LaundryFlow — Order Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- ─── Sidebar ─────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">🧺</span>
+      <h1>LaundryFlow</h1>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-view="dashboard" id="nav-dashboard">
+        <span class="nav-icon">📊</span> Dashboard
+      </button>
+      <button class="nav-btn" data-view="new-order" id="nav-new-order">
+        <span class="nav-icon">➕</span> New Order
+      </button>
+      <button class="nav-btn" data-view="orders" id="nav-orders">
+        <span class="nav-icon">📋</span> All Orders
+      </button>
+      <button class="nav-btn" data-view="prices" id="nav-prices">
+        <span class="nav-icon">💰</span> Price List
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="storage-badge" id="storage-badge">
+        <span class="badge-dot"></span>
+        <span id="storage-label">Checking...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── Mobile Header ──────────────────────────────────── -->
+  <header class="mobile-header" id="mobile-header">
+    <button class="hamburger" id="hamburger-btn">☰</button>
+    <span class="mobile-title">🧺 LaundryFlow</span>
+  </header>
+
+  <!-- ─── Main Content ────────────────────────────────────── -->
+  <main class="main-content" id="main-content">
+
+    <!-- Dashboard View -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-header">
+        <h2>Dashboard</h2>
+        <p class="subtitle">Overview of your laundry business</p>
+      </div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card stat-total">
+          <div class="stat-icon">📦</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-total-orders">0</span>
+            <span class="stat-label">Total Orders</span>
+          </div>
+        </div>
+        <div class="stat-card stat-revenue">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-revenue">₹0</span>
+            <span class="stat-label">Total Revenue</span>
+          </div>
+        </div>
+        <div class="stat-card stat-received">
+          <div class="stat-icon">📥</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-received">0</span>
+            <span class="stat-label">Received</span>
+          </div>
+        </div>
+        <div class="stat-card stat-processing">
+          <div class="stat-icon">⚙️</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-processing">0</span>
+            <span class="stat-label">Processing</span>
+          </div>
+        </div>
+        <div class="stat-card stat-ready">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-ready">0</span>
+            <span class="stat-label">Ready</span>
+          </div>
+        </div>
+        <div class="stat-card stat-delivered">
+          <div class="stat-icon">🚚</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-delivered">0</span>
+            <span class="stat-label">Delivered</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h3>Recent Orders</h3>
+        <div class="table-wrap">
+          <table class="data-table" id="recent-orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody id="recent-orders-body">
+              <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- New Order View -->
+    <section class="view" id="view-new-order">
+      <div class="view-header">
+        <h2>Create New Order</h2>
+        <p class="subtitle">Add customer details and garments</p>
+      </div>
+
+      <form class="order-form section-card" id="order-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="customer-name">Customer Name *</label>
+            <input type="text" id="customer-name" placeholder="e.g. Raj Sharma" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="phone-number">Phone Number *</label>
+            <input type="tel" id="phone-number" placeholder="e.g. 9876543210" required autocomplete="off">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="order-notes">Notes (optional)</label>
+          <input type="text" id="order-notes" placeholder="e.g. Stain on collar, express needed...">
+        </div>
+
+        <h3 class="section-title">Garments</h3>
+        <div id="garment-rows">
+          <!-- Garment rows will be added dynamically -->
+        </div>
+        <button type="button" class="btn btn-outline" id="add-garment-btn">+ Add Garment</button>
+
+        <div class="order-summary" id="order-summary">
+          <div class="summary-row">
+            <span>Total Items:</span>
+            <span id="summary-items">0</span>
+          </div>
+          <div class="summary-row summary-total">
+            <span>Total Amount:</span>
+            <span id="summary-total">₹0</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" id="submit-order-btn">
+          Create Order
+        </button>
+      </form>
+
+      <!-- Order Success Modal -->
+      <div class="modal-overlay" id="order-success-modal">
+        <div class="modal-card">
+          <div class="modal-icon">✅</div>
+          <h3>Order Created Successfully!</h3>
+          <div class="modal-details" id="modal-order-details"></div>
+          <button class="btn btn-primary" id="modal-close-btn">Done</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Orders List View -->
+    <section class="view" id="view-orders">
+      <div class="view-header">
+        <h2>All Orders</h2>
+        <p class="subtitle">Manage and track all orders</p>
+      </div>
+
+      <div class="filters-bar section-card">
+        <div class="filter-group">
+          <label>Status</label>
+          <select id="filter-status">
+            <option value="">All Statuses</option>
+            <option value="RECEIVED">Received</option>
+            <option value="PROCESSING">Processing</option>
+            <option value="READY">Ready</option>
+            <option value="DELIVERED">Delivered</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Customer</label>
+          <input type="text" id="filter-customer" placeholder="Search name...">
+        </div>
+        <div class="filter-group">
+          <label>Phone</label>
+          <input type="text" id="filter-phone" placeholder="Search phone...">
+        </div>
+        <div class="filter-group">
+          <label>Garment</label>
+          <input type="text" id="filter-garment" placeholder="e.g. Shirt">
+        </div>
+        <button class="btn btn-primary" id="apply-filters-btn">Search</button>
+        <button class="btn btn-outline" id="clear-filters-btn">Clear</button>
+      </div>
+
+      <div class="section-card">
+        <div class="table-wrap">
+          <table class="data-table" id="orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Est. Delivery</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-body">
+              <tr><td colspan="8" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Price List View -->
+    <section class="view" id="view-prices">
+      <div class="view-header">
+        <h2>Price List</h2>
+        <p class="subtitle">Standard garment pricing</p>
+      </div>
+
+      <div class="section-card">
+        <div class="price-grid" id="price-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+[build]
+  # Directory that contains the static frontend files
+  publish = "public"
+  # Directory where Netlify functions are located
+  functions = "netlify/functions"
+
+# Forward all API requests to the serverless function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
+
+# Fallback for the frontend single page app
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
